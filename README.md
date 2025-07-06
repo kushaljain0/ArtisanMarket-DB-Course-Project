@@ -1,5 +1,8 @@
 # ArtisanMarket - Polyglot Persistence Project
 
+## 🎥 Demo Screencast
+📺 **[Watch the Full Demo on YouTube](https://youtu.be/lCb0F7jwVII)** - 15-20 minute walkthrough covering design decisions, architecture, and live demonstration of all features.
+
 ## Overview
 Build a robust data layer for "ArtisanMarket," an online marketplace for handmade goods, using multiple database technologies optimized for specific use cases. This project will let you exercise your skills in  designing and implementing a polyglot persistence architecture where each database is chosen for its strengths.
 
