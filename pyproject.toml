@@ -1,0 +1,187 @@
+[project]
+name = "artisanmarket"
+version = "0.1.0"
+description = "ArtisanMarket - Multi-Database E-commerce Platform"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "ArtisanMarket Team", email = "team@artisanmarket.com"},
+]
+keywords = ["ecommerce", "database", "multi-database", "artisan", "marketplace"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: E-commerce",
+]
+dependencies = [
+    "psycopg2-binary>=2.9.0",
+    "pymongo>=4.0.0",
+    "redis>=4.0.0",
+    "neo4j>=5.0.0",
+    "pandas>=1.5.0",
+    "numpy>=1.21.0",
+    "click>=8.0.0",
+    "rich>=12.0.0",
+    "python-dotenv>=0.19.0",
+    "sentence-transformers>=2.2.0",
+    "scikit-learn>=1.1.0",
+    "faker>=18.0.0",
+    "pydantic>=1.10.0",
+    "structlog>=23.0.0",
+    "tenacity>=8.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.10.0",
+    "black>=22.0.0",
+    "isort>=5.10.0",
+    "flake8>=5.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=2.20.0",
+]
+
+[project.scripts]
+artisanmarket = "src.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/artisanmarket/artisanmarket"
+Documentation = "https://artisanmarket.readthedocs.io"
+Repository = "https://github.com/artisanmarket/artisanmarket.git"
+Issues = "https://github.com/artisanmarket/artisanmarket/issues"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "database: marks tests that require database access",
+    "redis: marks tests that require Redis",
+    "mongodb: marks tests that require MongoDB",
+    "neo4j: marks tests that require Neo4j",
+    "postgres: marks tests that require PostgreSQL",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/env/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src"]
+known_third_party = ["pytest", "click", "rich", "pandas", "numpy"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pymongo.*",
+    "neo4j.*",
+    "redis.*",
+    "psycopg2.*",
+    "click.*",
+    "rich.*",
+    "faker.*",
+    "sentence_transformers.*",
+    "sklearn.*",
+]
+ignore_missing_imports = true
+
+[tool.structlog]
+processors = [
+    "structlog.stdlib.filter_by_level",
+    "structlog.stdlib.add_logger_name",
+    "structlog.stdlib.add_log_level",
+    "structlog.stdlib.PositionalArgumentsFormatter",
+    "structlog.processors.TimeStamper",
+    "structlog.processors.StackInfoRenderer",
+    "structlog.processors.format_exc_info",
+    "structlog.processors.UnicodeDecoder",
+    "structlog.processors.JSONRenderer",
+]
+
+[tool.structlog.stdlib]
+renderer = "structlog.processors.JSONRenderer"
+
+[tool.structlog.contextvars]
+merge_contextvars = true
